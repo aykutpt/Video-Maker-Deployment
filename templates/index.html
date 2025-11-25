@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fotoğraftan Video Oluştur</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; }
+      .box { padding: 16px; border: 1px solid #ddd; border-radius: 8px; }
+      input[type=file]{display:block;margin-bottom:10px}
+      .status { margin-top: 12px; }
+    </style>
+  </head>
+  <body>
+    <h1>Fotoğraftan 10-15s Video Oluşturur</h1>
+    <div class="box">
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <label>Resim seçin (jpg/png):</label>
+        <input type="file" name="file" accept="image/*" required />
+
+        <label>Video Süresi (s) — önerilen: 10-15</label>
+        <input type="number" name="duration" value="12" min="5" max="30" step="1" />
+
+        <button type="submit">Video Oluştur</button>
+      </form>
+
+      <div class="status">
+        {% if error %}
+          <div style="color: #b00020">Hata: {{ error }}</div>
+        {% endif %}
+        {% if success %}
+          <div style="color: #007700">{{ success }}</div>
+        {% endif %}
+        {% if video_url %}
+          <p>Video hazır: <a href="{{ video_url }}">İndir / Önizle</a></p>
+          <video src="{{ video_url }}" controls style="max-width: 100%"></video>
+        {% endif %}
+      </div>
+    </div>
+
+    <section style="margin-top:20px">
+      <h3>Notlar</h3>
+      <ul>
+        <li>Yüksek kaliteli çıktı için sisteme <strong>ffmpeg</strong> kurulu ve PATH'te olmalıdır.</li>
+        <li>Varsayılan çözünürlük HD (1920x1080). İsterseniz `video_maker.py` içinde değiştirin.</li>
+        <li>Çıktı videonuz `app/outputs` dizinine kaydedilir ve `/outputs/` üzerinden sunulur.</li>
+      </ul>
+    </section>
+  </body>
+</html>
