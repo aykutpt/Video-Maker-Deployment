@@ -57,20 +57,22 @@ def create_video_from_image(input_image_path: str,
     clip = fadein(clip, 0.6)
     clip = fadeout(clip, 0.6)
 
-    # Write high-quality mp4 (libx264). Adjust bitrate for quality (8-12M recommended for HD)
+    # Write high-quality mp4 (libx264). Square format for Etsy - OPTIMIZED
     codec = 'libx264'
-    bitrate = "8000k"
+    bitrate = "2500k"  # Çok düşük bitrate (hızlı encoding)
 
     # Ensure directory exists
     os.makedirs(os.path.dirname(output_video_path) or '.', exist_ok=True)
 
     clip.write_videofile(output_video_path,
-                         fps=fps,
+                         fps=15,  # Daha düşük FPS (çoğu device'de 15 fps yeterli)
                          codec=codec,
                          bitrate=bitrate,
                          audio=False,
                          threads=4,
-                         preset='slow')
+                         preset='ultrafast',  # Maksimum hız
+                         verbose=False,
+                         logger=None)
 
     clip.close()
     img.close()
